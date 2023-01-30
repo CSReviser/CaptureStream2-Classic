@@ -37,7 +37,9 @@ Macintosh版: [macOS版について](https://github.com/CSReviser/CS-English/wik
 [jakago](https://github.com/jakago) 2014年度版以前  
 ### 改版者  
 [CSReviser](https://github.com/CSReviser) 2018年度以降改版    
-    
-    
 
+             
+     
 
+### イメージ（Windows版）  
+![無題21](https://user-images.githubusercontent.com/46049273/215409469-60aa60a4-3057-4dcc-a838-bc416ce18d6c.png)
