@@ -55,7 +55,7 @@ namespace {
         const QString WIKIXML1( "doc('" );
         const QString WIKIXML2( "')/flv/scramble[@date=\"" );
 	const QString WIKIXML3( "\"]/@code/string()" );
-	const QString APPNAME( "CS-English" );
+	const QString APPNAME( "CaptureStream2" );
 }
 
 // Macの場合はアプリケーションバンドル、それ以外はアプリケーションが含まれるディレクトリを返す
