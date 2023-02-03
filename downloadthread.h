@@ -36,15 +36,6 @@ public:
 	~DownloadThread() {}
 	void cancel() { isCanceled = true; }
 	
-	static QString opt_title1;
-	static QString opt_title2;
-	static QString opt_title3;
-	static QString opt_title4;
-	static QString opt_title5;
-	static QString opt_title6;
-	static QString opt_title7;
-	static QString opt_title8;
-
 protected:
 	void run();
 
@@ -101,15 +92,6 @@ private:
 	static QString scramble;
 	static QStringList malformed;
 	
-	static QString optional1;
-	static QString optional2;
-	static QString optional3;
-	static QString optional4;
-	static QString optional5;
-	static QString optional6;
-	static QString optional7;
-	static QString optional8;
-
 	static QHash<QString, QString> ffmpegHash;
 	static QHash<QProcess::ProcessError, QString>processError;
 

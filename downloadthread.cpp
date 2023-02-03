@@ -93,22 +93,6 @@ QString DownloadThread::ffmpeg;
 QString DownloadThread::Xml_koza;
 QString DownloadThread::test;
 QString DownloadThread::scramble;
-QString DownloadThread::optional1;
-QString DownloadThread::optional2;
-QString DownloadThread::optional3;
-QString DownloadThread::optional4;
-QString DownloadThread::optional5;
-QString DownloadThread::optional6;
-QString DownloadThread::optional7;
-QString DownloadThread::optional8;
-QString DownloadThread::opt_title1;
-QString DownloadThread::opt_title2;
-QString DownloadThread::opt_title3;
-QString DownloadThread::opt_title4;
-QString DownloadThread::opt_title5;
-QString DownloadThread::opt_title6;
-QString DownloadThread::opt_title7;
-QString DownloadThread::opt_title8;
 QStringList DownloadThread::malformed = (QStringList() << "3g2" << "3gp" << "m4a" << "mov");
 
 QHash<QString, QString> DownloadThread::ffmpegHash;
@@ -224,6 +208,23 @@ bool DownloadThread::checkExecutable( QString path ) {
 
 bool DownloadThread::isFfmpegAvailable( QString& path ) {
 	path = Utility::applicationBundlePath() + "ffmpeg";
+	
+#ifdef QT4_QT5_MAC    // MacのみoutputDirフォルダに置かれたffmpegを優先する
+	path = MainWindow::outputDir + "ffmpeg";
+	QFileInfo fileInfo( path );
+	if ( !fileInfo.exists() ) {
+		path = Utility::appConfigLocationPath() + "ffmpeg";
+		QFileInfo fileInfo( path );
+		if ( !fileInfo.exists() ) {
+			path = Utility::ConfigLocationPath() + "ffmpeg";
+			QFileInfo fileInfo( path );
+			if ( !fileInfo.exists() ) {
+				path = Utility::applicationBundlePath() + "ffmpeg";
+			}
+		}
+	} 
+#endif	
+
 #ifdef QT4_QT5_WIN
 	path += ".exe";
 #endif
@@ -826,7 +827,7 @@ QString DownloadThread::paths[] = {
 	"french/kouza", "french/kouza2",  "italian/kouza", "italian/kouza2",
 	"german/kouza", "german/kouza2", "spanish/kouza", "spanish/kouza2",
 	"russian/kouza","russian/kouza2", "null", "null",
-	"null", "null", "null"
+	"null", "null", "null", "null"
 };
 
 QString DownloadThread::json_paths[] = {
@@ -886,6 +887,23 @@ void DownloadThread::run() {
        for ( int i = 0; checkbox[i] && !isCanceled; i++ ) {
        
 		if ( checkbox[i]->isChecked()) {
+		
+//		   if ( (!(ui->checkBox_next_week2->isChecked()) && json_paths[i] != "0000" ) || Xml_koza == "NULL" ) {
+		   if ( json_paths[i] != "0000" || Xml_koza == "NULL" ) {
+		   	QStringList fileList2 = getJsonData( json_paths[i], "file_name" );
+			QStringList kouzaList2 = getJsonData( json_paths[i], "program_name" );
+			QStringList file_titleList = getJsonData( json_paths[i], "file_title" );
+			QStringList hdateList2 = one2two( getJsonData( json_paths[i], "onair_date" ));
+			QStringList yearList = getJsonData( json_paths[i], "open_time" );
+			
+			if ( fileList2.count() && fileList2.count() == kouzaList2.count() && fileList2.count() == hdateList2.count() ) {
+					for ( int j = 0; j < fileList2.count() && !isCanceled; j++ ){
+						if ( fileList2[j] == "" || fileList2[j] == "null" ) continue;
+						captureStream_json( kouzaList2[j], hdateList2[j], fileList2[j], yearList[j], file_titleList[j] );
+					}
+			}
+		   }
+		
 		   QString Xml_koza = "NULL";
 		   for ( int ii = 0; json_paths2[ii] != NULL; ii++ ) 
 		     	if ( json_paths[i] == json_paths2[ii]  )  Xml_koza = paths2[ii];  
@@ -906,21 +924,6 @@ void DownloadThread::run() {
 						captureStream( kouzaList[j], hdateList[j], fileList[j], nendoList[j], dirList[j], RR );
 					}
 				}
-			}
-		   }
-
-		   if ( (!(ui->checkBox_next_week2->isChecked()) && json_paths[i] != "0000" ) || Xml_koza == "NULL" ) {
-		   	QStringList fileList2 = getJsonData( json_paths[i], "file_name" );
-			QStringList kouzaList2 = getJsonData( json_paths[i], "program_name" );
-			QStringList file_titleList = getJsonData( json_paths[i], "file_title" );
-			QStringList hdateList2 = one2two( getJsonData( json_paths[i], "onair_date" ));
-			QStringList yearList = getJsonData( json_paths[i], "open_time" );
-			
-			if ( fileList2.count() && fileList2.count() == kouzaList2.count() && fileList2.count() == hdateList2.count() ) {
-					for ( int j = 0; j < fileList2.count() && !isCanceled; j++ ){
-						if ( fileList2[j] == "" || fileList2[j] == "null" ) continue;
-						captureStream_json( kouzaList2[j], hdateList2[j], fileList2[j], yearList[j], file_titleList[j] );
-					}
 			}
 		   }
 		}		   
