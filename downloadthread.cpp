@@ -94,6 +94,10 @@ QString DownloadThread::Xml_koza;
 QString DownloadThread::test;
 QString DownloadThread::scramble;
 QStringList DownloadThread::malformed = (QStringList() << "3g2" << "3gp" << "m4a" << "mov");
+QString DownloadThread::nendo1 = "2022";
+QString DownloadThread::nendo2 = "2023";
+QDate DownloadThread::nendo_end_date1(2023, 4, 2);
+QDate DownloadThread::nendo_start_date1(2023, 4, 3);
 
 QHash<QString, QString> DownloadThread::ffmpegHash;
 QHash<QProcess::ProcessError, QString> DownloadThread::processError;
@@ -369,7 +373,11 @@ QString DownloadThread::formatName( QString format, QString kouza, QString hdate
 	int year = nendo.right( 4 ).toInt();
 	int day = hdate.mid( 3, 2 ).toInt();
 	int year1 = QDate::currentDate().year();
-
+	
+	QDate on_air_date1(year, month, day);
+	if ( on_air_date1 <= nendo_end_date1 ) nendo = nendo1;
+	if ( on_air_date1 >= nendo_start_date1 ) nendo = nendo2;
+	
 	if ( QString::compare(  kouza , QString::fromUtf8( "ボキャブライダー" ) ) ==0 ){
 		if ( month == 3 && ( day == 30 || day == 31) && year == 2022 ) 
 		year += 0;
