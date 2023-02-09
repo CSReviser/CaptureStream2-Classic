@@ -5,7 +5,7 @@
 ***
 ### ＜主な特徴＞
 ### １．GUIの違い
-##### 　　　Clasic：2013年度以前のCaptuerStreamのＧＵＩを復刻
+##### 　　　Clasic：2013年度以前のCaptuerStreamのGUIを復刻
 ##### 　　　ＣＳ２：2014年度のCaptuerStreamをベースにした語学講座CSのGUIを継承
 ##### 　
 ### ２．英語講座の選択方法の違い
