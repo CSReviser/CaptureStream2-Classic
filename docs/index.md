@@ -18,7 +18,7 @@
 ##### 　
 ### ４．［前週］チェックボックスにチェックを入れた時の動作の違い
 ##### 　　　Clasic：聴き逃し配信と前週分の録音の双方を実行
-##### 　　　ＣＳ２：前週分の録音の双方を実行、聴き逃し配信の録音は実行しない
+##### 　　　ＣＳ２：前週分の録音のみ実行、聴き逃し配信の録音は実行しない
 ##### 　　※片方の配信のみの語学講座は［前週］チェックボックスの状態に関係なく録音を実行します。　
 ##### 　
 ### ５．［前週］チェックボックスにチェックの保存の違い
@@ -44,8 +44,10 @@
 ![無題21](https://user-images.githubusercontent.com/46049273/215409469-60aa60a4-3057-4dcc-a838-bc416ce18d6c.png)
 ## ［Ubuntu版］
 ![Screenshot from 2023-02-09 11-39-05](https://user-images.githubusercontent.com/46049273/217703729-a7ae416f-f6d3-4a5c-bc55-1689e7d81ea9.png)
+## ［Mac版］
+![image](https://user-images.githubusercontent.com/46049273/217985608-3667070b-f8e2-4aea-8782-480ffe6f2b12.png)      
 
-
+※Macのスクリーンショットは[yarakaoriさん](https://twitter.com/yarakaori/status/1623636285603860480?s=20&t=FsEDLZBWDJ84ZKhAXuV0kg)から提供いただきました。
 ***
 ##### ※ 録音した語学講座のファイルは著作権法で許されている範囲内でご利用ください。                     
 *** 
