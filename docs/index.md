@@ -48,6 +48,8 @@
 ![image](https://user-images.githubusercontent.com/46049273/217985608-3667070b-f8e2-4aea-8782-480ffe6f2b12.png)      
 
 ※Macのスクリーンショットは[yarakaoriさん](https://twitter.com/yarakaori/status/1623636285603860480?s=20&t=FsEDLZBWDJ84ZKhAXuV0kg)から提供いただきました。
+
+
 ***
 ##### ※ 録音した語学講座のファイルは著作権法で許されている範囲内でご利用ください。                     
 *** 
