@@ -88,7 +88,7 @@ namespace {
 //			int day = regexp.cap( 2 ).toInt();
 //			result = QString( " (%1/%2/%3)" ).arg( regexp.cap( 3 ) )
 //					.arg( month, 2, 10, QLatin1Char( '0' ) ).arg( day, 2, 10, QLatin1Char( '0' ) );
-			result = QString( "  (2023/02/04) -classic-" ); 
+			result = QString( "  (2023/02/11) -classic-" ); 
 		}
 		return result;
 	}
@@ -199,7 +199,7 @@ void MainWindow::settings( enum ReadWriteMode mode ) {
 //#define DefaultFileName3 "%h"
 //#define DefaultFileName4 "%f"
 	CheckBox checkBoxes[] = {
-		{ ui->checkBox_basic1, "basic0", false },
+		{ ui->checkBox_basic0, "basic0", false },
 		{ ui->checkBox_basic1, "basic1", false },
 		{ ui->checkBox_basic2, "basic2", false },
 		{ ui->checkBox_basic3, "basic3", false },
