@@ -41,11 +41,14 @@
 ***
 ### ＜語学講座ＣＳ２-Classic-   イメージ＞
 ## ［Windows版］
-![無題21](https://user-images.githubusercontent.com/46049273/215409469-60aa60a4-3057-4dcc-a838-bc416ce18d6c.png)
+<img src="https://user-images.githubusercontent.com/46049273/215409469-60aa60a4-3057-4dcc-a838-bc416ce18d6c.png" width="500">
+
 ## ［Ubuntu版］
-![Screenshot from 2023-02-09 11-39-05](https://user-images.githubusercontent.com/46049273/217703729-a7ae416f-f6d3-4a5c-bc55-1689e7d81ea9.png)
+<img src="https://user-images.githubusercontent.com/46049273/217703729-a7ae416f-f6d3-4a5c-bc55-1689e7d81ea9.png" width="500">
+
 ## ［Mac版］
-![image](https://user-images.githubusercontent.com/46049273/217985608-3667070b-f8e2-4aea-8782-480ffe6f2b12.png)      
+<img src="https://user-images.githubusercontent.com/46049273/217985608-3667070b-f8e2-4aea-8782-480ffe6f2b12.png" width="500">
+  
 
 ※Macのスクリーンショットは[yarakaoriさん](https://twitter.com/yarakaori/status/1623636285603860480?s=20&t=FsEDLZBWDJ84ZKhAXuV0kg)から提供いただきました。
 
