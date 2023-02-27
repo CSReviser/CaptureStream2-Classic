@@ -39,7 +39,7 @@
 
 ### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/4)に投稿してください。
 ***
-### ＜語学講座ＣＳ２-Classic-   イメージ＞
+### ＜語学講座CS２-Classic- イメージ＞
 ## ［Windows版］
 <img src="https://user-images.githubusercontent.com/46049273/215409469-60aa60a4-3057-4dcc-a838-bc416ce18d6c.png" width="500">
 
