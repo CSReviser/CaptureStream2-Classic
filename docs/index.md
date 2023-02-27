@@ -28,7 +28,7 @@
 ##### 　　※複数の講座を同時に一括で録音したい場合は「Clasic」の方が有利です。
 ###    　　　　　　　        
 ***
-### ＜語学講座CS2 実行ファイル＞
+### ＜実行ファイル＞
 ### Windows用
 ### [CaptureStream2-Classic-Windows-20230221.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20230221/CaptureStream2-Classic-Windows-20230221.zip)
 ### [CaptureStream2-Classic-Windows-x64-20230221.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20230221/CaptureStream2-Classic-Windows-x64-20230221.zip) 　　　　　　　　　　　　　　　　　　
