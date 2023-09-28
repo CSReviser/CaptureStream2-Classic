@@ -956,7 +956,7 @@ void DownloadThread::run() {
 		   }
 		
 		   QString Xml_koza = "NULL";
-		   for ( int ii = 0; json_paths2[ii] != NULL; ii++ ) 
+		   for ( int ii = 0; json_paths2[ii] != "NULL"; ii++ ) 
 		     	if ( json_paths[i] == json_paths2[ii]  )  Xml_koza = paths2[ii];  
 		
 		   if ( (ui->checkBox_next_week2->isChecked()) || json_paths[i] == "0000" ) {
