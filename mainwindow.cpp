@@ -26,9 +26,16 @@
 #include "utility.h"
 #include "qt4qt5.h"
 
+#ifdef QT5
+#include <QXmlQuery>
+#include <QDesktopWidget>
+#include <QRegExp>
+#endif
+#ifdef QT6
+#include <QRegularExpression>
+#endif
 #include <QMessageBox>
 #include <QByteArray>
-#include <QXmlQuery>
 #include <QStringList>
 #include <QProcess>
 #include <QCoreApplication>
@@ -37,7 +44,6 @@
 #include <QFileInfo>
 #include <QThread>
 #include <QSettings>
-#include <QDesktopWidget>
 #include <QInputDialog>
 #include <QFileDialog>
 #include <QTextStream>
@@ -52,6 +58,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QVariant>
+#include <QFont>
 
 #define SETTING_GROUP "MainWindow"
 #define SETTING_GEOMETRY "geometry"
@@ -73,12 +81,23 @@
 #define SCRAMBLE_URL2 "http://cdn47.atwikiimg.com/jakago/pub/scramble.xml"
 #define X11_WINDOW_VERTICAL_INCREMENT 5
 
+#ifdef QT4_QT5_WIN
+#define STYLE_SHEET "stylesheet-win.qss"
+#else
+#ifdef QT4_QT5_MAC
+#define STYLE_SHEET "stylesheet-mac.qss"
+#else
+#define STYLE_SHEET "stylesheet-ubu.qss"
+#endif
+#endif
+
 namespace {
 	bool outputDirSpecified = false;
 	QString version() {
 		QString result;
 		// 日本語ロケールではQDate::fromStringで曜日なしは動作しないのでQRegExpを使う
 		// __DATE__の形式： "Jul  8 2011"
+#ifdef QT5
 		static QRegExp regexp( "([a-zA-Z]{3})\\s+(\\d{1,2})\\s+(\\d{4})" );
 		static QStringList months = QStringList()
 				<< "Jan" << "Feb" << "Mar" << "Apr" << "May" << "Jun"
@@ -88,8 +107,12 @@ namespace {
 //			int day = regexp.cap( 2 ).toInt();
 //			result = QString( " (%1/%2/%3)" ).arg( regexp.cap( 3 ) )
 //					.arg( month, 2, 10, QLatin1Char( '0' ) ).arg( day, 2, 10, QLatin1Char( '0' ) );
-			result = QString( "  (2023/07/15) -classic-" ); 
+			result = QString( "  (2023/10/16) -classic-" ); 
 		}
+#endif
+#ifdef QT6
+			result = QString( "  (2023/10/16) -classic-" ); 
+#endif
 		return result;
 	}
 }
@@ -124,12 +147,17 @@ MainWindow::MainWindow( QWidget *parent )
 #ifdef QT4_QT5_MAC		// Macのウィンドウにはメニューが出ないので縦方向に縮める
 //	setMaximumHeight( maximumHeight() - menuBar()->height() );
 //	setMinimumHeight( maximumHeight() - menuBar()->height() );
-	menuBar()->setNativeMenuBar(false);
+	menuBar()->setNativeMenuBar(false);		// 他のOSと同様にメニューバーを表示　2023/04/04
 	setMaximumHeight( maximumHeight() );		// ダウンロードボタンが表示されない問題対策　2022/04/16
 	setMinimumHeight( maximumHeight() );		// ダウンロードボタンが表示されない問題対策　2022/04/16
+//	QRect rect = geometry();
+//	rect.setHeight( rect.height() - menuBar()->height() );
+//	rect.setHeight( rect.height() );		// ダウンロードボタンが表示されない問題対策　2022/04/16
+//	rect.moveTop( rect.top() + menuBar()->height() );	// 4.6.3だとこれがないとウィンドウタイトルがメニューバーに隠れる
+//	setGeometry( rect );
 #endif
 #ifdef Q_OS_LINUX		// Linuxでは高さが足りなくなるので縦方向に伸ばしておく
-	menuBar()->setNativeMenuBar(false);		// メニューバーが表示されなくなったに対応
+	menuBar()->setNativeMenuBar(false);					// メニューバーが表示されなくなったに対応
 	setMaximumHeight( maximumHeight() + X11_WINDOW_VERTICAL_INCREMENT );
 	setMinimumHeight( maximumHeight() + X11_WINDOW_VERTICAL_INCREMENT );
 	QRect rect = geometry();
@@ -159,9 +187,24 @@ MainWindow::MainWindow( QWidget *parent )
 	customizeMenu->addAction( action );
 	customizeMenu->addSeparator();
 
+	customizeMenu->addSeparator();
 	action = new QAction( QString::fromUtf8( "設定削除（終了）..." ), this );
 	connect( action, SIGNAL( triggered() ), this, SLOT( closeEvent2() ) );
 	customizeMenu->addAction( action );
+
+#ifdef QT4_QT5_MAC
+	QFont font( "Times New Roman", 10 );
+	qApp->setFont(font);
+#endif
+#ifdef QT4_QT5_WIN
+	QFont font( "Meiryo", 8 );
+	qApp->setFont(font);
+#endif
+#ifdef Q_OS_LINUX
+	QFont font( "Times New Roman", 9 );
+	qApp->setFont(font);
+#endif
+
 }
 
 MainWindow::~MainWindow() {
@@ -243,11 +286,7 @@ void MainWindow::settings( enum ReadWriteMode mode ) {
 		{ NULL, NULL, false }
 	};
 	
-//	customized_title1 = DefaultTitle1;
-//	customized_title2 = DefaultTitle2;
-//	customized_file_name1 = DefaultFileName1;
-//	customized_file_name2 = DefaultFileName2;
-
+	
 	QSettings settings( ini_file_path + INI_FILE, QSettings::IniFormat );
 	
 	settings.beginGroup( SETTING_GROUP );
@@ -258,7 +297,12 @@ void MainWindow::settings( enum ReadWriteMode mode ) {
 #if !defined( QT4_QT5_MAC )
 //#if defined( QT4_QT5_MAC ) || defined( QT4_QT5_WIN )	// X11では正しく憶えられないので位置をリストアしない(2022/11/01:Linux向けに変更）
 		saved = settings.value( SETTING_GEOMETRY );
+#ifdef QT5
 		if ( saved.type() == QVariant::Invalid )
+#endif
+#ifdef QT6
+		if ( saved.toString() == "" )
+#endif
 			move( 70, 22 );
 		else {
 			// ウィンドウサイズはバージョン毎に変わる可能性があるのでウィンドウ位置だけリストアする
@@ -270,7 +314,12 @@ void MainWindow::settings( enum ReadWriteMode mode ) {
 #endif
 #ifdef QT4_QT5_MAC
 		saved = settings.value( SETTING_MAINWINDOW_POSITION );
+#ifdef QT5
 		if ( saved.type() == QVariant::Invalid ){
+#endif
+#ifdef QT6
+		if ( saved.toString() == "" ){
+#endif
 			move( 70, 22 );
 			QRect rect = geometry();
 			rect.setHeight( rect.height() );		// ダウンロードボタンが表示されない問題対策　2022/04/16
@@ -288,10 +337,20 @@ void MainWindow::settings( enum ReadWriteMode mode ) {
 
 		saved = settings.value( SETTING_SAVE_FOLDER );
 #if !defined( QT4_QT5_MAC )
+#ifdef QT5
 		outputDir = saved.type() == QVariant::Invalid ? Utility::applicationBundlePath() : saved.toString();
 #endif
+#ifdef QT6
+		outputDir = saved.toString() == "" ? Utility::applicationBundlePath() : saved.toString();
+#endif
+#endif
 #ifdef QT4_QT5_MAC
+#ifdef QT5
 		if ( saved.type() == QVariant::Invalid ) {
+#endif
+#ifdef QT6
+		if ( saved.toString() == "" ) {
+#endif
 			outputDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
 			MainWindow::customizeSaveFolder();
 		} else
@@ -349,12 +408,145 @@ void MainWindow::customizeSaveFolder() {
 	}
 }
 
-void MainWindow::customizeScramble() {
-	ScrambleDialog dialog( scramble );
-	dialog.exec();
-	scramble = dialog.scramble();
+#if 0
+	if ( mode == ReadMode ) {	// 設定読み込み
+		QVariant saved;
+		
+//#if !defined( QT4_QT5_MAC )
+//#if defined( QT4_QT5_MAC ) || defined( QT4_QT5_WIN )	// X11では正しく憶えられないので位置をリストアしない(2022/11/01:Linux向けに変更）
+		saved = settings.value( SETTING_GEOMETRY );
+#ifdef QT5
+		if ( saved.type() == QVariant::Invalid )
+#endif
+#ifdef QT6
+		if ( saved.toString() == "" )
+#endif
+			move( 70, 22 );
+		else {
+			// ウィンドウサイズはバージョン毎に変わる可能性があるのでウィンドウ位置だけリストアする
+			QSize windowSize = size();
+			restoreGeometry( saved.toByteArray() );
+			resize( windowSize );
+		}
+//#endif                                              　//(2022/11/01:Linux向けに変更） 
+//#endif
+#if 0
+//#ifdef QT4_QT5_MAC
+		saved = settings.value( SETTING_MAINWINDOW_POSITION );
+		if ( saved.type() == QVariant::Invalid )
+			move( 70, 22 );
+		else {
+			QSize windowSize = size();
+			move( saved.toPoint() );
+			resize( windowSize );
+		}
+		saved = settings.value( SETTING_WINDOWSTATE );
+		if ( !(saved.type() == QVariant::Invalid) )
+			restoreState( saved.toByteArray() );
+#endif
+
+		saved = settings.value( SETTING_SAVE_FOLDER );
+#if !defined( QT4_QT5_MAC )
+#ifdef QT5
+		outputDir = saved.type() == QVariant::Invalid ? Utility::applicationBundlePath() : saved.toString();
+#endif
+#ifdef QT6
+		outputDir = saved.toString() == "" ? Utility::applicationBundlePath() : saved.toString();
+#endif
+#endif
+#ifdef QT4_QT5_MAC
+#ifdef QT5
+		if ( saved.type() == QVariant::Invalid ) {
+#endif
+#ifdef QT6
+		if ( saved.toString() == "" ) {
+#endif
+			outputDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+			MainWindow::customizeSaveFolder();
+		} else
+			outputDir = saved.toString();
+#endif
+	} else {	// 設定書き出し
+#if !defined( QT4_QT5_MAC )
+		settings.setValue( SETTING_GEOMETRY, saveGeometry() );
+#endif
+#ifdef QT4_QT5_MAC
+		settings.setValue( SETTING_WINDOWSTATE, saveState());
+		settings.setValue( SETTING_MAINWINDOW_POSITION, pos() );
+#endif
+		if ( outputDirSpecified )
+			settings.setValue( SETTING_SAVE_FOLDER, outputDir );
+	}
+
+	settings.endGroup();
 }
 
+void MainWindow::customizeTitle() {
+	CustomizeDialog dialog( Ui::TitleMode );
+	dialog.exec();
+}
+
+void MainWindow::customizeFileName() {
+	CustomizeDialog dialog( Ui::FileNameMode );
+	dialog.exec();
+}
+
+void MainWindow::customizeSaveFolder() {
+	QString dir = QFileDialog::getExistingDirectory( 0, QString::fromUtf8( "書き込み可能な保存フォルダを指定してください" ),
+									   outputDir, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
+	if ( dir.length() ) {
+		outputDir = dir + QDir::separator();
+		outputDirSpecified = true;
+	}
+}
+
+#if 0
+void MainWindow::customizeScramble() {
+	QString optional_temp[] = { optional1, optional2, optional3, optional4, optional5, optional6, optional7, optional8, "NULL" };
+	ScrambleDialog dialog( optional1, optional2, optional3, optional4, optional5, optional6, optional7, optional8 );
+    if (dialog.exec() ) {
+    	QString pattern( "[0-9]{4}" );
+    	pattern = QRegularExpression::anchoredPattern(pattern);
+	for ( int i = 0; optional_temp[i] != "NULL"; i++ ) 
+	    	if ( QRegularExpression(pattern).match( optional_temp[i] ).hasMatch() ) optional_temp[i] += "_01";
+
+	QString optional[] = { dialog.scramble1(), dialog.scramble2(), dialog.scramble3(), dialog.scramble4(), dialog.scramble5(), dialog.scramble6(), dialog.scramble7(), dialog.scramble8(), "NULL" };	
+	QString title[8];
+	for ( int i = 0; optional[i] != "NULL"; i++ ) {
+		if ( QRegularExpression(pattern).match( optional[i] ).hasMatch() ) optional[i] += "_01" ;
+		title[i] = Utility::getProgram_name( optional[i] );
+		if ( title[i]  == "" ) { optional[i] = optional_temp[i]; title[i] = Utility::getProgram_name( optional[i] ); }
+	}
+	optional1 = optional[0]; optional2 = optional[1];
+	optional3 = optional[2]; optional4 = optional[3];
+	optional5 = optional[4]; optional6 = optional[5];
+	optional7 = optional[6]; optional8 = optional[7];
+	program_title1 = title[0]; program_title2 = title[1];
+	program_title3 = title[2]; program_title4 = title[3];
+	program_title5 = title[4]; program_title6 = title[5];
+	program_title7 = title[6]; program_title8 = title[7];
+
+	QString program_title[] = { program_title1, program_title2, program_title3, program_title4, program_title5, program_title6, program_title7, program_title8, "NULL" };
+	QAbstractButton* checkboxx[] = { ui->toolButton_optional1, ui->toolButton_optional2,
+					 ui->toolButton_optional3, ui->toolButton_optional4,
+					 ui->toolButton_optional5, ui->toolButton_optional6,
+					 ui->toolButton_optional7, ui->toolButton_optional8,
+					 NULL
+		 	};
+	bool flag = false;
+	for ( int i = 0; program_title[i] != "NULL"; i++ ) {
+		if ( optional[i] == optional_temp[i] && checkboxx[i]->isChecked() ) flag = true; else flag = false;
+				checkboxx[i]->setChecked(false);
+				checkboxx[i]->setText( QString( program_title[i] ) );
+				if ( flag ) checkboxx[i]->setChecked( true );
+	}
+	optional1 = optional[0]; optional2 = optional[1]; optional3 = optional[2]; optional4 = optional[3];
+	optional5 = optional[4]; optional6 = optional[5]; optional7 = optional[6]; optional8 = optional[7];
+	ScrambleDialog dialog( optional1, optional2, optional3, optional4, optional5, optional6, optional7, optional8 );
+    }
+}
+#endif
+#endif
 void MainWindow::download() {	//「レコーディング」または「キャンセル」ボタンが押されると呼び出される
 	if ( !downloadThread ) {	//レコーディング実行
 		if ( messagewindow.text().length() > 0 )
@@ -373,38 +565,6 @@ void MainWindow::download() {	//「レコーディング」または「キャン
 		downloadThread->disconnect();	//wait中にSIGNALが発生するとデッドロックするためすべてdisconnect
 		finished();
 	}
-}
-
-QString MainWindow::getJsonData( QString url ) {
-	QString attribute;
-	attribute.clear() ;
-    	QEventLoop eventLoop;
-	QNetworkAccessManager mgr;
- 	QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
-	const QString jsonUrl = json_prefix + url + "/bangumi_" + url + "_01.json";
-	QUrl url_json( jsonUrl );
-	QNetworkRequest req;
-	req.setUrl(url_json);
-	QNetworkReply *reply = mgr.get(req);
-	eventLoop.exec(); 
-	
-	if (reply->error() == QNetworkReply::NoError) {
-		QString strReply = (QString)reply->readAll();
-		QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
-		QJsonObject jsonObject = jsonResponse.object();
-		QJsonObject jsonObj = jsonResponse.object();
-    
-		QJsonArray jsonArray = jsonObject[ "main" ].toArray();
-		QJsonObject objx2 = jsonObject[ "main" ].toObject();
-		attribute = objx2[ "program_name" ].toString().replace( "　", " " );
-		    for (ushort i = 0xFF1A; i < 0xFF5F; ++i) {
-		        attribute = attribute.replace(QChar(i), QChar(i - 0xFEE0));
-		    }
-		    for (ushort i = 0xFF10; i < 0xFF1A; ++i) {
-		        attribute = attribute.replace( QChar(i - 0xFEE0), QChar(i) );
-		    }
-	}
-	return attribute;
 }
 
 void MainWindow::toggled( bool checked ) {

@@ -34,7 +34,7 @@
 #include <QStringList>
 #include "messagewindow.h"
 
-#define INI_FILE "CaptureStream0.ini"
+#define INI_FILE "CaptureStream2-extra.ini"
 
 //ニュースで英会話「音声と動画」「音声のみ」「動画のみ」
 #define ENewsSaveBoth	0
@@ -103,12 +103,11 @@ private slots:
 	void customizeTitle();
 	void customizeFileName();
 	void customizeSaveFolder();
-	void customizeScramble();
+//	void customizeScramble();
 	void closeEvent2( );
 
 private:
 	QStringList getAttribute( QString url, QString attribute );
-	QString getJsonData( QString url );
 	Ui::MainWindowClass *ui;
 	DownloadThread* downloadThread;
 	QMenu* customizeMenu;
