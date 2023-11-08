@@ -11,7 +11,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 17)
 
 set(MACOSX_BUNDLE_ICON_FILE icon.icns)
-set(app_icon_macos "/Users/runner/work/CaptureStream2-Classic/icon.icns")
+set(app_icon_macos "${CMAKE_SOURCE_DIR}/icon.icns")
 set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
