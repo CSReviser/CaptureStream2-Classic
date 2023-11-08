@@ -23,7 +23,7 @@ jobs:
     - name: make
       run: make
       
-    - name: Make CaptureStream2 executable
+    - name: Make CaptureStream0 executable
       run: chmod -R 755 ./CaptureStream0.pro
   
     - uses: actions/upload-artifact@v3
