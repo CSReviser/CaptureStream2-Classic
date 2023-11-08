@@ -62,7 +62,8 @@ private:
 	bool istestAvailable( QString& path );
 	bool checkOutputDir( QString dirPath );
 	void downloadENews( bool re_read );
-	
+	QString ffmpeg_process( QStringList arguments );
+		
 	bool captureStream( QString kouza, QString hdate, QString file, QString nendo, QString dir, QString this_week );
 	bool captureStream_json( QString kouza, QString hdate, QString file, QString nendo, QString title );
 	
@@ -72,8 +73,9 @@ private:
 
 	Ui::MainWindowClass* ui;
 	bool isCanceled;
-    bool failed1935;
-
+	bool failed1935;
+	static QString Error_mes;
+	
 	static QString paths[];
 	static QString paths2[];
 	static QString paths3[];
