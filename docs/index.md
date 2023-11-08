@@ -30,19 +30,18 @@
 ***
 ### ＜実行ファイル＞
 ### Windows用
-### [CaptureStream2-Classic-Windows-20231016.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231016/CaptureStream2-Classic-Windows-20231016.zip)
-### [CaptureStream2-Classic-Windows-x64-20231016.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231016/CaptureStream2-Classic-Windows-x64-20231016.zip) 　　　　　　　　　　　　　　　　　　
+### [CaptureStream2-Classic-Windows-20231108.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-20231108.zip)
+### [CaptureStream2-Classic-Windows-x64-20231108.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-x64-20231108.zip) 　　　　　　　　　　　　　　　　　　
 ### Ubuntu用
-### [CaptureStream2-Classic-Ubuntu-qt5-20231016.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231016/CaptureStream2-Classic-Ubuntu-qt5-202301016.zip)
+### [CaptureStream2-Classic-Ubuntu-20231108.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Ubuntu-20231108.zip)
 ### MacOS用
-### [CaptureStream2-Classic-MacOS-20231016.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231016/CaptureStream2-Classic-MacOS-20231016.dmg)
-### [CaptureStream2-Classic-MacOS-Univarsal-20231016.dmg【Univarsal】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231016/CaptureStream2-Classic-MacOS-Univarsal-20231016.dmg)
+### [CaptureStream2-Classic-MacOS-20231108.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-MacOS-20231108.dmg)
 
-### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/6)に投稿してください。
+### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/7)に投稿してください。
 ***
 ### ＜語学講座CS２-Classic- イメージ＞
 ## ［Windows版］
-<img src="https://user-images.githubusercontent.com/46049273/215409469-60aa60a4-3057-4dcc-a838-bc416ce18d6c.png" width="500">
+<img src="https://github-production-user-asset-6210df.s3.amazonaws.com/46049273/281400414-a756dcbb-1633-411d-8efb-c285b0e005d2.png" width="500">
 
 ## ［Ubuntu版］
 <img src="https://user-images.githubusercontent.com/46049273/217703729-a7ae416f-f6d3-4a5c-bc55-1689e7d81ea9.png" width="500">
