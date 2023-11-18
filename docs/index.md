@@ -30,8 +30,7 @@
 ***
 ### ＜実行ファイル＞
 ### Windows用
-### [CaptureStream2-Classic-Windows-20231108.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-20231108.zip)
-### [CaptureStream2-Classic-Windows-x64-20231108.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-x64-20231108.zip) 　　　　　　　　　　　　　　　　　　
+### [CaptureStream2-Classic-Windows-x64-20231108.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-x64-20231108.zip) 　　　　　
 ### Ubuntu用
 ### [CaptureStream2-Classic-Ubuntu-20231108.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Ubuntu-20231108.zip)
 ### MacOS用
