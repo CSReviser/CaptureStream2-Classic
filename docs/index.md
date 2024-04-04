@@ -1,4 +1,4 @@
-## 語学講座CS2-Clasic- (2023年度)    
+## 語学講座CS2-Clasic- (2024年度)    
 ## ([語学講座CS2](https://csreviser.github.io/CaptureStream2/))[［類似アプリ］](https://csreviser.github.io/CaptureStream2/application)          
 ## [【初めての方へ】](https://csreviser.github.io/CaptureStream2/introduction)
 ##### 語学講座ＣＳ２ -Clasic- は、語学講座ＣＳ２をベースに語学講座ダウンローダCaptureStreamの2013年度以前のＵＩを復刻したものです。語学講座ＣＳ２と同様に、らじる★らじる(聴き逃し)のストリーミング配信に対応した、録音を自動化するためのアプリです。また、一部のユーザから要望があった複数（多数）の語学講座を一括で録音することに配慮した仕様にしています。
@@ -30,12 +30,12 @@
 ***
 ### ＜実行ファイル＞
 ### Windows用
-### [CaptureStream2-Classic-Windows-20231108.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-20231108.zip)
-### [CaptureStream2-Classic-Windows-x64-20231108.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Windows-x64-20231108.zip) 　　　　　　　　　　　　　　　　　　
+### [CaptureStream2-Classic-Windows-20240404.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240404/CaptureStream2-Classic-Windows-20240404.zip)
+### [CaptureStream2-Classic-Windows-x64-20240404.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240404/CaptureStream2-Classic-Windows-x64-20240404.zip) 　　　　　　　　　　　　　　　　　　
 ### Ubuntu用
-### [CaptureStream2-Classic-Ubuntu-20231108.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-Ubuntu-20231108.zip)
+### [CaptureStream2-Classic-Ubuntu-20240404.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240404/CaptureStream2-Classic-Ubuntu-20240404.zip)
 ### MacOS用
-### [CaptureStream2-Classic-MacOS-20231108.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20231108/CaptureStream2-Classic-MacOS-20231108.dmg)
+### [CaptureStream2-Classic-MacOS-20240404.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240404/CaptureStream2-Classic-MacOS-20240404.dmg)
 
 ### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/7)に投稿してください。
 ***
