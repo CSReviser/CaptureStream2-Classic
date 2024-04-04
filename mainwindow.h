@@ -90,7 +90,8 @@ public:
 	static QString program_title7;
 	static QString program_title8;
 	static QString no_write_ini;
-
+	static bool id_flag;
+	
 protected:
 	virtual void closeEvent( QCloseEvent *event );
 
@@ -103,6 +104,7 @@ private slots:
 	void customizeTitle();
 	void customizeFileName();
 	void customizeSaveFolder();
+	void customizeFolderOpen();
 //	void customizeScramble();
 	void closeEvent2( );
 

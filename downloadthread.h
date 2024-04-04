@@ -35,7 +35,8 @@ public:
 	DownloadThread( Ui::MainWindowClass* ui );
 	~DownloadThread() {}
 	void cancel() { isCanceled = true; }
-	
+	void id_list();
+		
 	static QString opt_title1;
 	static QString opt_title2;
 	static QString opt_title3;
@@ -56,7 +57,14 @@ signals:
 
 private:
 	QStringList getAttribute( QString url, QString attribute );
-	QStringList getJsonData( QString url, QString attribute );
+	std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> getAttribute1( QString url );
+	QString getAttribute2( QString url, QString attribute );
+	std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> getJsonData( QString url );
+	std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> getJsonData1( QString url );
+	std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> getJsonData2( QString url );
+	QStringList getJsonData_ouch( QString url, QString attribute );
+	QString getJsonFile( QString jsonUrl );
+
 	bool checkExecutable( QString path );
 	bool isFfmpegAvailable( QString& path );
 	bool istestAvailable( QString& path );
@@ -65,9 +73,9 @@ private:
 	QString ffmpeg_process( QStringList arguments );
 		
 	bool captureStream( QString kouza, QString hdate, QString file, QString nendo, QString dir, QString this_week );
-	bool captureStream_json( QString kouza, QString hdate, QString file, QString nendo, QString title );
+	bool captureStream_json( QString kouza, QString hdate, QString file, QString nendo, QString title, QString dupnmb );
 	
-	QString formatName( QString format, QString kouza, QString hdate, QString file, QString nendo, bool checkIllegal );
+	QString formatName( QString format, QString kouza, QString hdate, QString file, QString nendo, QString dupnmb, bool checkIllegal );
 	QStringList getElements( QString url, QString path );
 	void downloadShower();
 

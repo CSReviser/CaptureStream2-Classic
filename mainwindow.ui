@@ -209,7 +209,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_french">
          <property name="text">
-          <string>フランス語</string>
+          <string>まいにちフランス語</string>
          </property>
         </widget>
        </item>
@@ -220,7 +220,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_italian">
          <property name="text">
-          <string>イタリア語</string>
+          <string>まいにちイタリア語</string>
          </property>
         </widget>
        </item>
@@ -231,7 +231,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_german">
          <property name="text">
-          <string>ドイツ語</string>
+          <string>まいにちドイツ語</string>
          </property>
         </widget>
        </item>
@@ -242,7 +242,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_spanish">
          <property name="text">
-          <string>スペイン語</string>
+          <string>まいにちスペイン語</string>
          </property>
         </widget>
        </item>
@@ -253,7 +253,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_russian">
          <property name="text">
-          <string>ロシア語</string>
+          <string>まいにちロシア語</string>
          </property>
         </widget>
        </item>
@@ -264,7 +264,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_portuguese">
          <property name="text">
-          <string>ポルトガル語</string>
+          <string>ポルトガル語講座</string>
          </property>
         </widget>
        </item>
@@ -275,7 +275,7 @@
        <item>
         <widget class="QCheckBox" name="checkBox_arabic">
          <property name="text">
-          <string>アラビア語</string>
+          <string>アラビア語講座</string>
          </property>
         </widget>
        </item>
