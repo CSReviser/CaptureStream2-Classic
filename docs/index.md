@@ -37,7 +37,7 @@
 ### MacOS用
 ### [CaptureStream2-Classic-MacOS-20240404.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240404/CaptureStream2-Classic-MacOS-20240404.dmg)
 
-### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/7)に投稿してください。
+### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/8)に投稿してください。
 ***
 ### ＜語学講座CS２-Classic- イメージ＞
 ## ［Windows版］
