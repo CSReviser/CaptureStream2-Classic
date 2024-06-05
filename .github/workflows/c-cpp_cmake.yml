@@ -38,7 +38,7 @@ jobs:
       run: mkdir -p ./build/MacCaptureStream2-Classic
 
     - name: Tar files
-      run: tar cvf CaptureStream2.tar ./CaptureStream0.app
+      run: tar cvf CaptureStream0.tar ./CaptureStream0.app
       
     - uses: actions/upload-artifact@v4
       with:
