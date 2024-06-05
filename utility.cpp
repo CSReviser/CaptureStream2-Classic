@@ -120,7 +120,6 @@ std::tuple<QStringList, QStringList> Utility::getProgram_List( ) {
 	QStringList titleList; 		titleList.clear() ;
 		
 	const QString jsonUrl1 = "https://www.nhk.or.jp/radio-api/app/v1/web/ondemand/corners/new_arrivals";
-	const QString jsonUrl2 = "https://www.nhk.or.jp/radioondemand/json/index_v3/index.json";
 
 	QString strReply;
 	int flag = 0;
@@ -132,10 +131,6 @@ std::tuple<QStringList, QStringList> Utility::getProgram_List( ) {
 		strReply = Utility::getJsonFile( jsonUrl1, Timer );
 		if ( strReply != "error" )  {
 			flag = 1; break;
-		}
-		strReply = Utility::getJsonFile( jsonUrl2, Timer );
-		if ( strReply != "error" )  {
-			flag = 2; break;
 		}
 		if ( Timer < 500 ) Timer += 50;
 		if ( Timer > 500 && Timer < TimerMax ) Timer += 100;
@@ -245,7 +240,7 @@ QString Utility::getProgram_name( QString url ) {
     	if ( !(QRegularExpression(pattern2).match( url ).hasMatch()) ) return attribute;
 	
  	const QString jsonUrl1 = "https://www.nhk.or.jp/radio-api/app/v1/web/ondemand/series?site_id=" + url.left(4) + "&corner_site_id=" + url.right(2);
-	const QString jsonUrl2 = "https://www.nhk.or.jp/radioondemand/json/" + url.left(4) + "/bangumi_" + url + ".json";
+//	const QString jsonUrl2 = "https://www.nhk.or.jp/radioondemand/json/" + url.left(4) + "/bangumi_" + url + ".json";
 
 	QString strReply;
 	int flag = 0;
@@ -258,10 +253,10 @@ QString Utility::getProgram_name( QString url ) {
 		if ( strReply != "error" )  {
 			flag = 1; break;
 		}
-		strReply = Utility::getJsonFile( jsonUrl2, Timer );
-		if ( strReply != "error" )  {
-			flag = 2; break;
-		}
+//		strReply = Utility::getJsonFile( jsonUrl2, Timer );
+//		if ( strReply != "error" )  {
+//			flag = 2; break;
+//		}
 		if ( Timer < 500 ) Timer += 50;
 		if ( Timer > 500 && Timer < TimerMax ) Timer += 100;
 	}
