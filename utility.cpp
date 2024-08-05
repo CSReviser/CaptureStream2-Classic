@@ -48,6 +48,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonValue>
+#include <QMap>
 
 namespace {
 	const QString UPUPUP( "/../../.." );
@@ -73,6 +74,55 @@ namespace {
         const QString WIKIXML2( "')/flv/scramble[@date=\"" );
 	const QString WIKIXML3( "\"]/@code/string()" );
 	const QString APPNAME( "CaptureStream2" );
+
+QMap<QString, QString> four_to_ten_map = { 
+	{ "6805_01", "GGQY3M1929_01" },		// 小学生の基礎英語
+	{ "6806_01", "148W8XX226_01" },		// 中学生の基礎英語 レベル1
+	{ "6807_01", "83RW6PK3GG_01" },		// 中学生の基礎英語 レベル2
+	{ "6808_01", "B2J88K328M_01" },		// 中高生の基礎英語 in English
+	{ "2331_01", "8Z6XJ6J415_01" },		// 英会話タイムトライアル
+	{ "0916_01", "PMMJ59J6N2_01" },		// ラジオ英会話
+	{ "6809_01", "368315KKP8_01" },		// ラジオビジネス英語
+	{ "3064_01", "BR8Z3NX7XM_01" },		// エンジョイ・シンプル・イングリッシュ
+	{ "0953_01", "XQ487ZM61K_01" },		// まいにちフランス語 
+	{ "0953_x1", "XQ487ZM61K_x1" },		// まいにちフランス語 
+	{ "0953_y1", "XQ487ZM61K_y1" },		// まいにちフランス語 
+	{ "0943_01", "N8PZRZ9WQY_01" },		// まいにちドイツ語 
+	{ "0943_x1", "N8PZRZ9WQY_x1" },		// まいにちドイツ語 
+	{ "0943_y1", "N8PZRZ9WQY_y1" },		// まいにちドイツ語 
+	{ "0948_01", "NRZWXVGQ19_01" },		// まいにちスペイン語 
+	{ "0948_x1", "NRZWXVGQ19_x1" },		// まいにちスペイン語 
+	{ "0948_y1", "NRZWXVGQ19_y1" },		// まいにちスペイン語 
+	{ "0946_01", "LJWZP7XVMX_01" },		// まいにちイタリア語 
+	{ "0946_x1", "LJWZP7XVMX_x1" },		// まいにちイタリア語 
+	{ "0946_y1", "LJWZP7XVMX_y1" },		// まいにちイタリア語 
+	{ "0956_01", "YRLK72JZ7Q_01" },		// まいにちロシア語
+	{ "0956_x1", "YRLK72JZ7Q_x1" },		// まいにちロシア語
+	{ "0956_y1", "YRLK72JZ7Q_y1" },		// まいにちロシア語
+	{ "0915_01", "983PKQPYN7_01" },		// まいにち中国語
+	{ "6581_01", "MYY93M57V6_01" },		// ステップアップ中国語
+	{ "0951_01", "LR47WW9K14_01" },		// まいにちハングル講座
+	{ "6810_01", "NLJM5V3WXK_01" },		// ステップアップ ハングル講座
+	{ "0937_01", "WKMNWGMN6R_01" },		//アラビア語講座
+	{ "2769_01", "N13V9K157Y_01" },		//ポルトガル語
+	{ "7155_01", "4MY6Q8XP88_01" },		//Living in Japan
+	{ "7880_01", "GLZQ4M519X_01" },		//Asian View
+	{ "0701_01", "6LPPKP6W8Q_01" },		//やさしい日本語
+	{ "7629_01", "D6RM27PGVM_01" },		//Learn Japanese from the News
+	{ "0164_01", "X4X6N1XG8Z_01" },		//青春アドベンチャー
+	{ "0930_01", "D85RZVGX7W_01" },		//新日曜名作座
+	{ "8062_01", "LRK2VXPK5X_01" },		//朗読
+	{ "0058_01", "M65G6QLKMY_01" },		//FMシアター
+	{ "6311_01", "R5XR783QK3_01" },		//おしゃべりな古典教室
+	{ "1929_01", "DK83KZ8848_01" },		//カルチャーラジオ 文学の世界
+	{ "0961_01", "5L3859P515_01" },		//古典講読
+	{ "3065_01", "XKR4W8GY15_01" },		//カルチャーラジオ 科学と人間
+	{ "7792_01", "4K58V66ZGQ_01" },		//梶裕貴のラジオ劇場
+	{ "0960_01", "X78J5NKWM9_01" },		//こころをよむ
+	{ "7412_01", "MVYJ6PRZMX_01" },		//アナウンサー百年百話
+	{ "0424_01", "JWQ88ZVWQK_01" }		//宗教の時間
+};
+
 }
 
 // Macの場合はアプリケーションバンドル、それ以外はアプリケーションが含まれるディレクトリを返す
@@ -462,4 +512,22 @@ QStringList Utility::optionList() {
 	}
 	return attribute;
 }
+
+QString Utility::four_to_ten( QString url ) {
+	QString pattern( "[0-9]{4}" );
+    	pattern = QRegularExpression::anchoredPattern(pattern);
+ 	QString pattern2( "[A-Z0-9][0-9]{3}_[xy0][0-9]" );
+    	if ( QRegularExpression(pattern).match( url ).hasMatch() ) url += "_01";
+    	if ( !(QRegularExpression(pattern2).match( url ).hasMatch()) ) return "error";
+    	
+    	if ( four_to_ten_map.contains( url ) ) return four_to_ten_map.value( url );
+
+	QStringList idList;
+	QStringList titleList;
+	std::tie( idList, titleList ) = Utility::getProgram_List();
+	if ( idList.contains( url ) ) return url;
+
+	return "error";
+}
+
 
