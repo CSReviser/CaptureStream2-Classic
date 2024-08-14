@@ -108,11 +108,11 @@ namespace {
 //			int day = regexp.cap( 2 ).toInt();
 //			result = QString( " (%1/%2/%3)" ).arg( regexp.cap( 3 ) )
 //					.arg( month, 2, 10, QLatin1Char( '0' ) ).arg( day, 2, 10, QLatin1Char( '0' ) );
-			result = QString( "  (2024/08/06) -classic-" ); 
+			result = QString( "  (2024/08/14) -classic-" ); 
 		}
 #endif
 #ifdef QT6
-			result = QString( "  (2024/08/06) -classic-" ); 
+			result = QString( "  (2024/08/14) -classic-" ); 
 #endif
 		return result;
 	}
@@ -150,8 +150,8 @@ MainWindow::MainWindow( QWidget *parent )
 //	setMaximumHeight( maximumHeight() - menuBar()->height() );
 //	setMinimumHeight( maximumHeight() - menuBar()->height() );
 	menuBar()->setNativeMenuBar(false);		// 他のOSと同様にメニューバーを表示　2023/04/04
-	setMaximumHeight( maximumHeight() );		// ダウンロードボタンが表示されない問題対策　2022/04/16
-	setMinimumHeight( maximumHeight() );		// ダウンロードボタンが表示されない問題対策　2022/04/16
+	setMaximumHeight( maximumHeight() + ( menuBar()->height() - 24 ) * 2 );	// レコーディングボタンが表示されない問題対策　2024/06/06
+	setMinimumHeight( maximumHeight() + ( menuBar()->height() - 24 ) * 2 );	// レコーディングボタンが表示されない問題対策　2024/06/06
 //	QRect rect = geometry();
 //	rect.setHeight( rect.height() - menuBar()->height() );
 //	rect.setHeight( rect.height() );		// ダウンロードボタンが表示されない問題対策　2022/04/16

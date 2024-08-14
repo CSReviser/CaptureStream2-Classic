@@ -59,6 +59,7 @@ qt_add_resources(${CMAKE_PROJECT_NAME} "stylesheet"
         "/"
     FILES
         ${stylesheet_resource_files}
+        icon.png
 )
 
 if(APPLE)
