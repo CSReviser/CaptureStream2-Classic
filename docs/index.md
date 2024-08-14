@@ -30,14 +30,14 @@
 ***
 ### ＜実行ファイル＞
 ### Windows用
-### [CaptureStream2-Classic-Windows-x86-20240605.zip 【32bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240605/CaptureStream2-Classic-Windows-x86-20240605.zip)
-### [CaptureStream2-Classic-Windows-x64-20240605.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240605/CaptureStream2-Classic-Windows-x64-20240605.zip) 　　　　　　　　　　　　　　　　　　
+### [CaptureStream2-Classic-Windows-x86-20240814.zip 【32bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-Windows-x86-20240814.zip)
+### [CaptureStream2-Classic-Windows-x64-20240814.zip 【64bit版】](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-Windows-x64-20240814.zip) 　　　　　　　　　　　　　　　　　　
 ### Ubuntu用
-### [CaptureStream2-Classic-Ubuntu-20240605.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240605/CaptureStream2-Classic-Ubuntu-20240605.zip)
+### [CaptureStream2-Classic-Ubuntu-20240814.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-Ubuntu-20240814.zip)
 ### MacOS用
-### [CaptureStream2-Classic-MacOS-20240605.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240605/CaptureStream2-Classic-MacOS-20240605.dmg)
+### [CaptureStream2-Classic-MacOS-20240814.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-MacOS-20240814.dmg)
 
-### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/9)に投稿してください。
+### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/10)に投稿してください。
 ***
 ### ＜語学講座CS２-Classic- イメージ＞
 ## ［Windows版］
