@@ -35,7 +35,7 @@
 ### Ubuntu用
 ### [CaptureStream2-Classic-Ubuntu-20240814.zip](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-Ubuntu-20240814.zip)
 ### MacOS用
-### [CaptureStream2-Classic-MacOS-20240814.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-MacOS-20240814.dmg)
+### [CaptureStream2-Classic-MacOS-20240814.dmg](https://github.com/CSReviser/CaptureStream2-Classic/releases/download/20240814/CaptureStream2-Classic-MacOS-20240814-1.dmg)
 
 ### ※バグ報告などは[こちら](https://github.com/CSReviser/CaptureStream2-Classic/discussions/10)に投稿してください。
 ***
