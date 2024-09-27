@@ -91,6 +91,11 @@ public:
 	static QString program_title8;
 	static QString no_write_ini;
 	static bool id_flag;
+	static QStringList idList;
+	static QStringList titleList;
+	static QMap<QString, QString> name_map;
+	static QMap<QString, QString> id_map;
+	static QMap<QString, QString> thumbnail_map;
 	
 protected:
 	virtual void closeEvent( QCloseEvent *event );
@@ -105,9 +110,11 @@ private slots:
 	void customizeFileName();
 	void customizeSaveFolder();
 	void customizeFolderOpen();
+	void homepageOpen();
 //	void customizeScramble();
 	void closeEvent2( );
-
+	void setmap();
+	
 private:
 	QStringList getAttribute( QString url, QString attribute );
 	Ui::MainWindowClass *ui;

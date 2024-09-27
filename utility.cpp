@@ -283,14 +283,25 @@ QString Utility::getJsonFile( QString jsonUrl, int Timer ) {
 QString Utility::getProgram_name( QString url ) {
 	QString attribute;	QString title;	QString corner_name;
 	attribute.clear() ;
-	QString pattern( "[0-9]{4}" );
+
+	QString pattern( "[A-Z0-9][0-9]{3}|[A-Z0-9]{10}" );
     	pattern = QRegularExpression::anchoredPattern(pattern);
- 	QString pattern2( "[A-Z0-9][0-9]{3}_[0-9]{2}" );
+ 	QString pattern2( "[A-Z0-9][0-9]{3}_[sxy0-9][0-9]|[A-Z0-9]{10}_[sxy0-9][0-9]" );
     	if ( QRegularExpression(pattern).match( url ).hasMatch() ) url += "_01";
-    	if ( !(QRegularExpression(pattern2).match( url ).hasMatch()) ) return attribute;
+    	
+//	QString pattern( "[A-Z0-9]{4}_[0-9]{2}" );
+//    	pattern = QRegularExpression::anchoredPattern(pattern);
+// 	QString pattern2( "[A-Z0-9]{10}_[0-9]{2}" );
+//     	if ( url.right(3) != "_01" ) url += "_01";
+
+	if ( MainWindow::id_map.contains( url ) ) return MainWindow::id_map.value( url );
+
+	int l = 10 ;				int l_length = url.length();
+	if ( l_length != 13 ) l = l_length -3 ;
+    	
+//    	if ( !(QRegularExpression(pattern).match( url ).hasMatch()) && !(QRegularExpression(pattern2).match( url ).hasMatch()) ) return attribute;
 	
- 	const QString jsonUrl1 = "https://www.nhk.or.jp/radio-api/app/v1/web/ondemand/series?site_id=" + url.left(4) + "&corner_site_id=" + url.right(2);
-//	const QString jsonUrl2 = "https://www.nhk.or.jp/radioondemand/json/" + url.left(4) + "/bangumi_" + url + ".json";
+ 	const QString jsonUrl1 = "https://www.nhk.or.jp/radio-api/app/v1/web/ondemand/series?site_id=" + url.left( l ) + "&corner_site_id=" + url.right(2);
 
 	QString strReply;
 	int flag = 0;
@@ -314,7 +325,6 @@ QString Utility::getProgram_name( QString url ) {
 	switch ( flag ) {
 	case 0: return attribute;
 	case 1: std::tie( title, corner_name ) = Utility::getProgram_name1( strReply ); break;
-	case 2: std::tie( title, corner_name ) = Utility::getProgram_name2( strReply ); break;
 	default: return attribute;
 	}
 	attribute = Utility::getProgram_name3( title, corner_name );
@@ -378,7 +388,7 @@ std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> Util
 		QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
 		QJsonObject jsonObject = jsonResponse.object();
  
-		QString program_name = jsonObject[ "title" ].toString().replace( "　", " " );
+		QString program_name = jsonObject[ "title" ].toString().replace( "　", " " ); program_name = program_name.replace( " ", "_" );
 		QString corner_name = jsonObject[ "corner_name" ].toString().replace( "　", " " );
 		if ( !(corner_name.isNull()  || corner_name.isEmpty()) ) {
 			corner_name.remove( "を聴く" );
@@ -411,10 +421,10 @@ std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> Util
 			QString program_name_tmp = program_name;
 			if( json_ohyo == 1 && ( file_title.contains( "中級編", Qt::CaseInsensitive) || file_title.contains( "応用編", Qt::CaseInsensitive) )  ) continue;
 			if( json_ohyo == 2 && ( file_title.contains( "入門編", Qt::CaseInsensitive) || file_title.contains( "初級編", Qt::CaseInsensitive) )  ) continue;
-			if( json_ohyo == 1 && ( file_title.contains( "入門編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 入門編";
-			if( json_ohyo == 1 && ( file_title.contains( "初級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 初級編";
-			if( json_ohyo == 2 && ( file_title.contains( "中級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 中級編";
-			if( json_ohyo == 2 && ( file_title.contains( "応用編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 応用編";
+			if( json_ohyo == 1 && ( file_title.contains( "入門編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【入門編】";
+			if( json_ohyo == 1 && ( file_title.contains( "初級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【初級編】";
+			if( json_ohyo == 2 && ( file_title.contains( "中級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【中級編】";
+			if( json_ohyo == 2 && ( file_title.contains( "応用編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【応用編】";
 			
 			kouzaList += program_name_tmp;
 			file_titleList += file_title;
@@ -439,7 +449,7 @@ std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> Util
     
 		QJsonArray jsonArray = jsonObject[ "main" ].toArray();
 		QJsonObject objx2 = jsonObject[ "main" ].toObject();
-		QString program_name = objx2[ "program_name" ].toString().replace( "　", " " );
+		QString program_name = objx2[ "program_name" ].toString().replace( "　", " " ); program_name = program_name.replace( " ", "_" );
 		QString corner_name = objx2[ "corner_name" ].toString().replace( "　", " " );
 		if ( !(corner_name.isNull()  || corner_name.isEmpty()) ) {
 			corner_name.remove( "を聴く" );
@@ -472,10 +482,10 @@ std::tuple<QStringList, QStringList, QStringList, QStringList, QStringList> Util
 				QString program_name_tmp = program_name;
 				if( json_ohyo == 1 && ( file_title.contains( "中級編", Qt::CaseInsensitive) || file_title.contains( "応用編", Qt::CaseInsensitive) )  ) continue;
 				if( json_ohyo == 2 && ( file_title.contains( "入門編", Qt::CaseInsensitive) || file_title.contains( "初級編", Qt::CaseInsensitive) )  ) continue;
-				if( json_ohyo == 1 && ( file_title.contains( "入門編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 入門編";
-				if( json_ohyo == 1 && ( file_title.contains( "初級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 初級編";
-				if( json_ohyo == 2 && ( file_title.contains( "中級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 中級編";
-				if( json_ohyo == 2 && ( file_title.contains( "応用編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + " 応用編";
+				if( json_ohyo == 1 && ( file_title.contains( "入門編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【入門編】";
+				if( json_ohyo == 1 && ( file_title.contains( "初級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【初級編】";
+				if( json_ohyo == 2 && ( file_title.contains( "中級編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【中級編】";
+				if( json_ohyo == 2 && ( file_title.contains( "応用編", Qt::CaseInsensitive) )) program_name_tmp = program_name_tmp + "【応用編】";
 
 				kouzaList += program_name_tmp;
 				file_titleList += file_title;

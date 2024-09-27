@@ -108,11 +108,11 @@ namespace {
 //			int day = regexp.cap( 2 ).toInt();
 //			result = QString( " (%1/%2/%3)" ).arg( regexp.cap( 3 ) )
 //					.arg( month, 2, 10, QLatin1Char( '0' ) ).arg( day, 2, 10, QLatin1Char( '0' ) );
-			result = QString( "  (2024/08/14) -classic-" ); 
+			result = QString( "  (2024/09/28) -classic-" ); 
 		}
 #endif
 #ifdef QT6
-			result = QString( "  (2024/08/14) -classic-" ); 
+			result = QString( "  (2024/09/28) -classic-" ); 
 #endif
 		return result;
 	}
@@ -132,6 +132,12 @@ QString MainWindow::suffix = "listdataflv.xml";
 QString MainWindow::json_prefix = "https://www.nhk.or.jp/radioondemand/json/";
 QString MainWindow::no_write_ini;
 bool MainWindow::id_flag = false;
+QStringList MainWindow::idList;
+QStringList MainWindow::titleList;
+QMap<QString, QString> MainWindow::name_map;
+QMap<QString, QString> MainWindow::id_map;
+QMap<QString, QString> MainWindow::thumbnail_map;
+
 
 MainWindow::MainWindow( QWidget *parent )
 		: QMainWindow( parent ), ui( new Ui::MainWindowClass ), downloadThread( NULL ) {
@@ -192,6 +198,11 @@ MainWindow::MainWindow( QWidget *parent )
 	connect( action, SIGNAL( triggered() ), this, SLOT( customizeTitle() ) );
 	customizeMenu->addAction( action );
 	customizeMenu->addSeparator();
+
+	customizeMenu->addSeparator();
+	action = new QAction( QString::fromUtf8( "ホームページ表示..." ), this );
+	connect( action, SIGNAL( triggered() ), this, SLOT( homepageOpen() ) );
+	customizeMenu->addAction( action );
 
 	customizeMenu->addSeparator();
 	action = new QAction( QString::fromUtf8( "設定削除（終了）..." ), this );
@@ -274,9 +285,11 @@ void MainWindow::settings( enum ReadWriteMode mode ) {
 		{ ui->checkBox_this_week, "this_week", true },
 		{ ui->checkBox_next_week, "next_week", false },
 		{ ui->checkBox_next_week2, "past_week", false },
+		{ ui->checkBox_thumbnail, "thumbnail", false },
 		{ NULL, NULL, false }
 	};
-
+	setmap();
+	
 	typedef struct ComboBox {
 		QComboBox* comboBox;
 		QString key;
@@ -409,96 +422,12 @@ void MainWindow::customizeFolderOpen() {
 	QDesktopServices::openUrl(QUrl("file:///" + outputDir, QUrl::TolerantMode));
 }
 
-void MainWindow::customizeSaveFolder() {
-	QString dir = QFileDialog::getExistingDirectory( 0, QString::fromUtf8( "書き込み可能な保存フォルダを指定してください" ),
-									   outputDir, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks );
-	if ( dir.length() ) {
-		outputDir = dir + QDir::separator();
-		outputDirSpecified = true;
+void MainWindow::homepageOpen() {
+	QString	message = "語学講座CS2のホームページを表示しますか？";
+	int res = QMessageBox::question(this, tr("ホームページ表示"), message);
+	if (res == QMessageBox::Yes) {
+		QDesktopServices::openUrl(QUrl("https://csreviser.github.io/CaptureStream2/", QUrl::TolerantMode));
 	}
-}
-
-#if 0
-	if ( mode == ReadMode ) {	// 設定読み込み
-		QVariant saved;
-		
-//#if !defined( QT4_QT5_MAC )
-//#if defined( QT4_QT5_MAC ) || defined( QT4_QT5_WIN )	// X11では正しく憶えられないので位置をリストアしない(2022/11/01:Linux向けに変更）
-		saved = settings.value( SETTING_GEOMETRY );
-#ifdef QT5
-		if ( saved.type() == QVariant::Invalid )
-#endif
-#ifdef QT6
-		if ( saved.toString() == "" )
-#endif
-			move( 70, 22 );
-		else {
-			// ウィンドウサイズはバージョン毎に変わる可能性があるのでウィンドウ位置だけリストアする
-			QSize windowSize = size();
-			restoreGeometry( saved.toByteArray() );
-			resize( windowSize );
-		}
-//#endif                                              　//(2022/11/01:Linux向けに変更） 
-//#endif
-#if 0
-//#ifdef QT4_QT5_MAC
-		saved = settings.value( SETTING_MAINWINDOW_POSITION );
-		if ( saved.type() == QVariant::Invalid )
-			move( 70, 22 );
-		else {
-			QSize windowSize = size();
-			move( saved.toPoint() );
-			resize( windowSize );
-		}
-		saved = settings.value( SETTING_WINDOWSTATE );
-		if ( !(saved.type() == QVariant::Invalid) )
-			restoreState( saved.toByteArray() );
-#endif
-
-		saved = settings.value( SETTING_SAVE_FOLDER );
-#if !defined( QT4_QT5_MAC )
-#ifdef QT5
-		outputDir = saved.type() == QVariant::Invalid ? Utility::applicationBundlePath() : saved.toString();
-#endif
-#ifdef QT6
-		outputDir = saved.toString() == "" ? Utility::applicationBundlePath() : saved.toString();
-#endif
-#endif
-#ifdef QT4_QT5_MAC
-#ifdef QT5
-		if ( saved.type() == QVariant::Invalid ) {
-#endif
-#ifdef QT6
-		if ( saved.toString() == "" ) {
-#endif
-			outputDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-			MainWindow::customizeSaveFolder();
-		} else
-			outputDir = saved.toString();
-#endif
-	} else {	// 設定書き出し
-#if !defined( QT4_QT5_MAC )
-		settings.setValue( SETTING_GEOMETRY, saveGeometry() );
-#endif
-#ifdef QT4_QT5_MAC
-		settings.setValue( SETTING_WINDOWSTATE, saveState());
-		settings.setValue( SETTING_MAINWINDOW_POSITION, pos() );
-#endif
-		if ( outputDirSpecified )
-			settings.setValue( SETTING_SAVE_FOLDER, outputDir );
-	}
-
-	settings.endGroup();
-}
-
-void MainWindow::customizeTitle() {
-	CustomizeDialog dialog( Ui::TitleMode );
-	dialog.exec();
-}
-
-void MainWindow::customizeFileName() {
-	CustomizeDialog dialog( Ui::FileNameMode );
-	dialog.exec();
 }
 
 void MainWindow::customizeSaveFolder() {
@@ -510,53 +439,6 @@ void MainWindow::customizeSaveFolder() {
 	}
 }
 
-#if 0
-void MainWindow::customizeScramble() {
-	QString optional_temp[] = { optional1, optional2, optional3, optional4, optional5, optional6, optional7, optional8, "NULL" };
-	ScrambleDialog dialog( optional1, optional2, optional3, optional4, optional5, optional6, optional7, optional8 );
-    if (dialog.exec() ) {
-    	QString pattern( "[0-9]{4}" );
-    	pattern = QRegularExpression::anchoredPattern(pattern);
-	for ( int i = 0; optional_temp[i] != "NULL"; i++ ) 
-	    	if ( QRegularExpression(pattern).match( optional_temp[i] ).hasMatch() ) optional_temp[i] += "_01";
-
-	QString optional[] = { dialog.scramble1(), dialog.scramble2(), dialog.scramble3(), dialog.scramble4(), dialog.scramble5(), dialog.scramble6(), dialog.scramble7(), dialog.scramble8(), "NULL" };	
-	QString title[8];
-	for ( int i = 0; optional[i] != "NULL"; i++ ) {
-		if ( QRegularExpression(pattern).match( optional[i] ).hasMatch() ) optional[i] += "_01" ;
-		title[i] = Utility::getProgram_name( optional[i] );
-		if ( title[i]  == "" ) { optional[i] = optional_temp[i]; title[i] = Utility::getProgram_name( optional[i] ); }
-	}
-	optional1 = optional[0]; optional2 = optional[1];
-	optional3 = optional[2]; optional4 = optional[3];
-	optional5 = optional[4]; optional6 = optional[5];
-	optional7 = optional[6]; optional8 = optional[7];
-	program_title1 = title[0]; program_title2 = title[1];
-	program_title3 = title[2]; program_title4 = title[3];
-	program_title5 = title[4]; program_title6 = title[5];
-	program_title7 = title[6]; program_title8 = title[7];
-
-	QString program_title[] = { program_title1, program_title2, program_title3, program_title4, program_title5, program_title6, program_title7, program_title8, "NULL" };
-	QAbstractButton* checkboxx[] = { ui->toolButton_optional1, ui->toolButton_optional2,
-					 ui->toolButton_optional3, ui->toolButton_optional4,
-					 ui->toolButton_optional5, ui->toolButton_optional6,
-					 ui->toolButton_optional7, ui->toolButton_optional8,
-					 NULL
-		 	};
-	bool flag = false;
-	for ( int i = 0; program_title[i] != "NULL"; i++ ) {
-		if ( optional[i] == optional_temp[i] && checkboxx[i]->isChecked() ) flag = true; else flag = false;
-				checkboxx[i]->setChecked(false);
-				checkboxx[i]->setText( QString( program_title[i] ) );
-				if ( flag ) checkboxx[i]->setChecked( true );
-	}
-	optional1 = optional[0]; optional2 = optional[1]; optional3 = optional[2]; optional4 = optional[3];
-	optional5 = optional[4]; optional6 = optional[5]; optional7 = optional[6]; optional8 = optional[7];
-	ScrambleDialog dialog( optional1, optional2, optional3, optional4, optional5, optional6, optional7, optional8 );
-    }
-}
-#endif
-#endif
 void MainWindow::download() {	//「レコーディング」または「キャンセル」ボタンが押されると呼び出される
 	if ( !downloadThread ) {	//レコーディング実行
 		if ( messagewindow.text().length() > 0 )
@@ -622,5 +504,103 @@ void MainWindow::closeEvent2( ) {
 	messagewindow.close();
 	QCoreApplication::exit();
 	}
+}
+
+void MainWindow::setmap() {
+	QStringList idList; 		idList.clear();
+	QStringList titleList; 		titleList.clear();
+	QStringList thumbnailList; 	thumbnailList.clear();
+	QString temp1;			QString temp2;
+	QStringList kozaList = { "まいにちイタリア語", "まいにちスペイン語", "まいにちドイツ語", "まいにちフランス語", "まいにちロシア語" };
+	QStringList kozaList1 = { "4MY6Q8XP88_01", "GLZQ4M519X_01", "6LPPKP6W8Q_01", "D6RM27PGVM_01", "X4X6N1XG8Z_01", "D85RZVGX7W_01", "LRK2VXPK5X_01", "M65G6QLKMY_01", "R5XR783QK3_01", "DK83KZ8848_01", "5L3859P515_01", "XKR4W8GY15_01", "4K58V66ZGQ_01", "X78J5NKWM9_01", "MVYJ6PRZMX_01", "JWQ88ZVWQK_01" };
+		
+	const QString jsonUrl1 = "https://www.nhk.or.jp/radio-api/app/v1/web/ondemand/corners/new_arrivals";
+	QString strReply;
+	int TimerMin = 100;
+	int TimerMax = 5000;
+	int Timer = TimerMin;
+	int retry = 20;
+	for ( int i = 0 ; i < retry ; i++ ) {
+		strReply = Utility::getJsonFile( jsonUrl1, Timer );
+		if ( strReply != "error" ) break;
+		if ( Timer < 500 ) Timer += 50;
+		if ( Timer > 500 && Timer < TimerMax ) Timer += 100;
+	}
+
+	QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
+	QJsonObject jsonObject = jsonResponse.object();
+    	QJsonArray jsonArray = jsonObject[ "corners" ].toArray();
+	for (const auto&& value : jsonArray) {
+		QJsonObject objxx = value.toObject();
+		QString title = objxx[ "title" ].toString();
+		QString corner_name = objxx[ "corner_name" ].toString();
+		QString series_site_id = objxx[ "series_site_id" ].toString();
+		QString corner_site = objxx[ "corner_site_id" ].toString();
+		QString thumbnail_url = objxx[ "thumbnail_url" ].toString();
+				
+		QString program_name = Utility::getProgram_name3( title, corner_name );
+		QString url_id = series_site_id + "_" + corner_site;
+		idList += url_id;
+		titleList += program_name;
+		thumbnailList += thumbnail_url;
+	}
+	for ( int i = 0 ; i < idList.count() ; i++  )	{
+		id_map.insert( idList[i], titleList[i] );
+		name_map.insert( titleList[i], idList[i] );			
+		thumbnail_map.insert( idList[i], thumbnailList[i] );
+	}
+
+	for ( int i = 0 ; i < kozaList.count() ; i++  )	{
+		QString url = name_map[ kozaList[i] ];
+		int l = 10 ;
+		int l_length = url.length();
+		if ( l_length != 13 ) l = l_length -3 ;
+ 		const QString jsonUrl1 = "https://www.nhk.or.jp/radio-api/app/v1/web/ondemand/series?site_id=" + url.left( l ) + "&corner_site_id=" + url.right(2);
+		for ( int i = 0 ; i < retry ; i++ ) {
+			strReply = Utility::getJsonFile( jsonUrl1, Timer );
+			if ( strReply != "error" ) break;
+			if ( Timer < 500 ) Timer += 50;
+			if ( Timer > 500 && Timer < TimerMax ) Timer += 100;
+		}
+		QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
+		QJsonObject jsonObject = jsonResponse.object();
+		QJsonArray jsonArray = jsonObject[ "episodes" ].toArray();
+		for (const auto&& value : jsonArray) {
+			QJsonObject objxx = value.toObject();
+			QString file_title = objxx[ "program_title" ].toString();
+			if( file_title.contains("入門編") ) {
+				temp1 = kozaList[i] + "【入門編】";
+				temp2 = url.left( l ) + "_x1";
+			}
+			if( file_title.contains("初級編") ) {
+				temp1 = kozaList[i] + "【初級編】";
+				temp2 = url.left( l ) + "_x1";
+			}
+			if( file_title.contains("応用編") ) {
+				temp1 = kozaList[i] + "【応用編】";
+				temp2 = url.left( l ) + "_y1";
+			}
+			if( file_title.contains("中級編") ) {
+				temp1 = kozaList[i] + "【中級編】";
+				temp2 = url.left( l ) + "_y1";
+			}
+			name_map.insert( temp1, temp2 );
+			id_map.insert( temp2, temp1 );
+		}
+	}
+	for ( int i = 0 ; i < kozaList1.count() ; i++  ) {
+		if(!id_map.contains(kozaList1[i])) id_map.insert( kozaList1[i], Utility::getProgram_name(kozaList1[i]) );;
+	}
+
+	name_map.insert( "中国語講座", "983PKQPYN7_s1" );
+	name_map.insert( "ハングル講座", "LR47WW9K14_s1" );
+	name_map.insert( "日本語講座", "6LPPKP6W8Q_s1" );
+	id_map.insert( "983PKQPYN7_s1", "中国語講座" );
+	id_map.insert( "LR47WW9K14_s1", "ハングル講座" );
+	id_map.insert( "6LPPKP6W8Q_s1", "日本語講座" );
+	
+	idList.clear();
+	titleList.clear();
+	return;
 }
 

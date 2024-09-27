@@ -312,6 +312,33 @@ void DownloadThread::id_list() {
 	MainWindow::id_flag = false;
 }
 
+void DownloadThread::thumbnail_add( QString dstPath, QString tmp, QString json_path ) {
+	int l = 10 ;
+	int l_length = json_path.length();
+	if ( l_length != 13 ) l = l_length -3 ;
+	if ( !MainWindow::thumbnail_map.contains( json_path.left( l ) + "_01" ) ) return;
+	QFile::rename( dstPath, tmp );
+	QString thumb = MainWindow::thumbnail_map.value( json_path.left( l ) + "_01" );
+	QStringList arguments_t = { "-y", "-i", tmp, "-i", thumb, "-id3v2_version", "3", "-map", "0:a", "-map", "1:v", "-map_metadata", "0", "-codec", "copy", "-disposition:1", "attached_pic", dstPath };
+	if ( dstPath.right( 3 ) == "mp3" )
+		arguments_t = { "-y", "-i", tmp, "-i", thumb, "-id3v2_version", "3", "-write_xing", "0", "-map", "0:a", "-map", "1:v", "-map_metadata", "0", "-codec", "copy", "-disposition:1", "attached_pic", dstPath };
+	QProcess process_t;
+	process_t.setProgram( ffmpeg );
+	process_t.setArguments( arguments_t );
+	process_t.start();
+	process_t.waitForFinished();
+	QString str_t = process_t.readAllStandardError();
+	process_t.kill();
+	process_t.close();
+	if ( str_t.contains( "error", Qt::CaseInsensitive )){
+		QFile::remove( dstPath );
+		QFile::rename( tmp, dstPath);
+		return;
+	}
+	QFile::remove( tmp );
+	return;
+}
+
 bool DownloadThread::checkExecutable( QString path ) {
 	QFileInfo fileInfo( path );
 	
@@ -574,7 +601,7 @@ QString DownloadThread::formatName( QString format, QString kouza, QString hdate
 
 //--------------------------------------------------------------------------------
 
-bool DownloadThread::captureStream( QString kouza, QString hdate, QString file, QString nendo, QString dir, QString this_week ) {
+bool DownloadThread::captureStream( QString kouza, QString hdate, QString file, QString nendo, QString dir, QString json_path, QString this_week ) {
 	QString outputDir = MainWindow::outputDir + kouza;
 	if ( this_week == "R" )
 		outputDir = MainWindow::outputDir + QString::fromUtf8( "[前週]" )+ "/" + kouza;
@@ -813,6 +840,9 @@ bool DownloadThread::captureStream( QString kouza, QString hdate, QString file, 
 			return false;
 		}
 	}}
+	QString tmp = outputDir + "tmp"  + "." + extension1;
+	if ( ui->checkBox_thumbnail->isChecked() && extension1 != "aac" ) thumbnail_add( dstPath, tmp, json_path );
+	
 #ifdef QT4_QT5_WIN
 		QFile::rename( dstPath, outputDir + outFileName );
 #endif
@@ -821,7 +851,7 @@ bool DownloadThread::captureStream( QString kouza, QString hdate, QString file, 
 
 
 
-bool DownloadThread::captureStream_json( QString kouza, QString hdate, QString file, QString nendo, QString title, QString dupnmb ) {
+bool DownloadThread::captureStream_json( QString kouza, QString hdate, QString file, QString nendo, QString title, QString dupnmb, QString json_path ) {
 
 	QString titleFormat;
 	QString fileNameFormat;
@@ -924,7 +954,7 @@ bool DownloadThread::captureStream_json( QString kouza, QString hdate, QString f
 	
 	QStringList argumentsB = arguments1 + arguments0 + ffmpegHash[extension]
 			.arg( filem3u8aA, dstPathA, id3tagTitleA, id3tag_album,  nendo ).split(",");
-
+	QString tmp = outputDir + "tmp"  + "." + extension1;
 	Error_mes = "";
 	QString ffmpeg_Error;
 	int retry = 5;
@@ -935,6 +965,7 @@ bool DownloadThread::captureStream_json( QString kouza, QString hdate, QString f
 #ifdef QT4_QT5_WIN
 			QFile::rename( dstPath, outputDir + outFileName );
 #endif
+			if ( ui->checkBox_thumbnail->isChecked() && extension1 != "aac" ) thumbnail_add( dstPathA, tmp, json_path );
 			return true;
 		}
 		if ( ffmpeg_Error == "1" ) {
@@ -957,6 +988,7 @@ bool DownloadThread::captureStream_json( QString kouza, QString hdate, QString f
 #ifdef QT4_QT5_WIN
 			QFile::rename( dstPath, outputDir + outFileName );
 #endif
+			if ( ui->checkBox_thumbnail->isChecked() && extension1 != "aac" ) thumbnail_add( dstPathA, tmp, json_path );
 			return true;
 		}
 		if ( ffmpeg_Error == "1" ) {
@@ -1156,7 +1188,7 @@ void DownloadThread::run() {
 				if ( fileList2.count() && fileList2.count() == kouzaList2.count() && fileList2.count() == hdateList2.count() ) {
 						for ( int j = 0; j < fileList2.count() && !isCanceled; j++ ){
 							if ( fileList2[j] == "" || fileList2[j] == "null" ) continue;
-							captureStream_json( kouzaList2[j], hdateList2[j], fileList2[j], yearList[j], file_titleList[j], dupnmbList[j] );
+							captureStream_json( kouzaList2[j], hdateList2[j], fileList2[j], yearList[j], file_titleList[j], dupnmbList[j], json_paths[i]);
 						}
 				}
 			}
@@ -1205,7 +1237,7 @@ void DownloadThread::run() {
 			if ( fileList2.count() && fileList2.count() == kouzaList2.count() && fileList2.count() == hdateList2.count() ) {
 					for ( int j = 0; j < fileList2.count() && !isCanceled; j++ ){
 						if ( fileList2[j] == "" || fileList2[j] == "null" ) continue;
-						captureStream_json( kouzaList2[j], hdateList2[j], fileList2[j], yearList[j], file_titleList[j], dupnmbList[j] );
+						captureStream_json( kouzaList2[j], hdateList2[j], fileList2[j], yearList[j], file_titleList[j], dupnmbList[j], json_paths[i] );
 					}
 			}
 		   }
@@ -1240,7 +1272,7 @@ void DownloadThread::run() {
 					for ( int j = 0; j < fileList.count() && !isCanceled; j++ ){
 						QString RR = "R";
 						if (json_paths[i] == "0000" )  RR = "G";
-						captureStream( kouzaList[j], hdateList[j], fileList[j], nendoList[j], dirList[j], RR );
+						captureStream( kouzaList[j], hdateList[j], fileList[j], nendoList[j], dirList[j], json_paths[i], RR );
 					}
 				}
 			}
